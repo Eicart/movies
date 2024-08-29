@@ -16,11 +16,23 @@ h1 {
     margin: 0;
 }
 
-#movie-list {
+#categories {
+    padding: 1em;
+}
+
+.category {
+    margin-bottom: 2em;
+}
+
+.category h2 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.movie-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    padding: 1em;
+    justify-content: space-around;
 }
 
 .movie {
