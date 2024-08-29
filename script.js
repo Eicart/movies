@@ -1,14 +1,19 @@
 const apiKey = '3f42753'; // Reemplaza con tu clave API de OMDb
 const baseUrl = 'http://www.omdbapi.com/';
-const movieList = document.getElementById('movie-list');
+const categories = {
+    action: 'action',
+    comedy: 'comedy',
+    drama: 'drama'
+};
 
-async function fetchMovies(query) {
-    const response = await fetch(`${baseUrl}?apikey=${apiKey}&s=${query}`);
+async function fetchMoviesByCategory(category) {
+    const response = await fetch(`${baseUrl}?apikey=${apiKey}&s=${category}`);
     const data = await response.json();
-    return data.Search;
+    return data.Search || [];
 }
 
-function displayMovies(movies) {
+function displayMovies(category, movies) {
+    const movieList = document.getElementById(`${category}-movies`);
     movieList.innerHTML = '';
 
     movies.forEach(movie => {
@@ -23,7 +28,11 @@ function displayMovies(movies) {
     });
 }
 
-window.onload = async () => {
-    const movies = await fetchMovies('Inception'); // Reemplaza 'Inception' con el título que quieras buscar
-    displayMovies(movies);
-};
+async function loadMovies() {
+    for (const [category, query] of Object.entries(categories)) {
+        const movies = await fetchMoviesByCategory(query);
+        displayMovies(category, movies);
+    }
+}
+
+window.onload = loadMovies;
