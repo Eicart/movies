@@ -1,37 +1,29 @@
-// Datos de ejemplo de películas
-const movies = [
-    {
-        title: "El Padrino",
-        description: "La saga de una familia mafiosa italiana que se desarrolla en la década de 1940.",
-        image: "https://example.com/el-padrino.jpg"
-    },
-    {
-        title: "Inception",
-        description: "Un ladrón que roba secretos corporativos a través del uso de la tecnología de los sueños.",
-        image: "https://example.com/inception.jpg"
-    },
-    {
-        title: "Interstellar",
-        description: "Un grupo de exploradores viaja a través de un agujero de gusano en el espacio para asegurar la supervivencia de la humanidad.",
-        image: "https://example.com/interstellar.jpg"
-    }
-];
+const apiKey = '3f42753'; // Reemplaza con tu clave API de OMDb
+const baseUrl = 'http://www.omdbapi.com/';
+const movieList = document.getElementById('movie-list');
 
-function displayMovies() {
-    const movieList = document.getElementById('movie-list');
+async function fetchMovies(query) {
+    const response = await fetch(`${baseUrl}?apikey=${apiKey}&s=${query}`);
+    const data = await response.json();
+    return data.Search;
+}
+
+function displayMovies(movies) {
     movieList.innerHTML = '';
 
     movies.forEach(movie => {
         const movieElement = document.createElement('div');
         movieElement.className = 'movie';
         movieElement.innerHTML = `
-            <img src="${movie.image}" alt="${movie.title}">
-            <h2>${movie.title}</h2>
-            <p>${movie.description}</p>
+            <img src="${movie.Poster !== 'N/A' ? movie.Poster : 'default-image.jpg'}" alt="${movie.Title}" onerror="this.src='default-image.jpg';">
+            <h2>${movie.Title}</h2>
+            <p>${movie.Year}</p>
         `;
         movieList.appendChild(movieElement);
     });
 }
 
-// Cargar las películas al cargar la página
-window.onload = displayMovies;
+window.onload = async () => {
+    const movies = await fetchMovies('Inception'); // Reemplaza 'Inception' con el título que quieras buscar
+    displayMovies(movies);
+};
